@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Fruits - Order Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            list-style: none;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ff5722;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2E7D32;
+        }
+        
+        .fruits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .fruit-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .fruit-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .fruit-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .fruit-info {
+            padding: 1.5rem;
+        }
+        
+        .fruit-name {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fruit-price {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #388E3C;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="../menu/index.html" class="logo">
+        <div class="logo">Food Delight</div>
+    </a>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="../menu/about.html">About</a></li>
+                <li class="cart-icon">
+                    <a href="../menu/cart.html">Cart <span class="cart-count">0</span></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <h1>Our Fresh Fruits Collection</h1>
+        
+        <div class="fruits-container">
+            <div class="fruit-card">
+                <img src="../imagers/apple.png" alt="Apple" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Apple</h3>
+                    <p class="fruit-price">₹200/kg</p>
+                    <button class="add-to-cart" data-id="1" data-name="Apple" data-price="200">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/banana.png" alt="Banana" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Banana</h3>
+                    <p class="fruit-price">₹40/kg</p>
+                    <button class="add-to-cart" data-id="2" data-name="Banana" data-price="40">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/Screenshot 2025-04-20 174835.png" alt="Watermelon" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Watermelon</h3>
+                    <p class="fruit-price">₹90/kg</p>
+                    <button class="add-to-cart" data-id="3" data-name="Watermelon" data-price="90">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/Screenshot 2025-04-20 174748.png" alt="Orange" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Orange</h3>
+                    <p class="fruit-price">₹229/kg</p>
+                    <button class="add-to-cart" data-id="4" data-name="Orange" data-price="299">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/Screenshot 2025-04-20 175235.png" alt="Strawberry" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">guavava</h3>
+                    <p class="fruit-price">₹100/kg</p>
+                    <button class="add-to-cart" data-id="5" data-name="Strawberry" data-price="100">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/Screenshot 2025-04-20 182452.png" alt="Grape" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Litchi</h3>
+                    <p class="fruit-price">₹99/kg</p>
+                    <button class="add-to-cart" data-id="6" data-name="Grape" data-price="99">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/mango.png" alt="Mango" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Mango</h3>
+                    <p class="fruit-price">₹349/kg</p>
+                    <button class="add-to-cart" data-id="7" data-name="Mango" data-price="349">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="fruit-card">
+                <img src="../imagers/pineapple.png" alt="Pineapple" class="fruit-image">
+                <div class="fruit-info">
+                    <h3 class="fruit-name">Pineapple</h3>
+                    <p class="fruit-price">₹149/kg</p>
+                    <button class="add-to-cart" data-id="8" data-name="Pineapple" data-price="149">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div class="notification" id="notification">Item added to cart!</div>
+    
+    <script>
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartCount = document.querySelector('.cart-count');
+        const notification = document.getElementById('notification');
+        
+        // Update cart count on page load
+        updateCartCount();
+        
+        // Add to cart buttons
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                
+                addToCart(id, name, price);
+                
+                // Show notification
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 2000);
+            });
+        });
+        
+        function addToCart(id, name, price) {
+            // Check if item already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id,
+                    name,
+                    price,
+                    quantity: 1
+                });
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update cart count
+            updateCartCount();
+        }
+        
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+        }
+    </script>
+</body>
+</html>

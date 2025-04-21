@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart - Food Delight</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+        color: #333;
+        padding: 2rem;
+        max-width: 900px;
+        margin: auto;
+      }
+
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .cart-container {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding: 1rem 0;
+      }
+
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+
+      .item-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 1rem;
+      }
+
+      .item-info {
+        flex: 1;
+      }
+
+      .item-name {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .item-qty {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .qty-btn {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      .qty-input {
+        width: 40px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 0.2rem;
+      }
+
+      .item-total {
+        font-weight: bold;
+        color: #4caf50;
+        min-width: 100px;
+        text-align: right;
+        margin-left: 1rem;
+      }
+
+      .remove-btn {
+        background-color: #ff5252;
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 1rem;
+      }
+
+      .remove-btn:hover {
+        background-color: #e53935;
+      }
+
+      .checkout {
+        margin-top: 2rem;
+        text-align: right;
+      }
+
+      .checkout-btn {
+        padding: 0.8rem 1.5rem;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .checkout-btn:hover {
+        background-color: #388e3c;
+      }
+
+      .order-message {
+        display: none;
+        background-color: #4caf50;
+        color: white;
+        padding: 1rem;
+        border-radius: 4px;
+        text-align: center;
+        margin-top: 2rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Your Shopping Cart</h1>
+
+    <div class="cart-container" id="cart-container"></div>
+
+    <div class="checkout">
+      <button class="checkout-btn" id="checkout-btn">
+        Proceed to Checkout
+      </button>
+    </div>
+
+    <div class="order-message" id="order-message">
+      🎉 Order placed successfully! Thank you for shopping with us.
+    </div>
+
+    <!-- Add inside <body> tag after the order message -->
+    <div id="form-wrapper" style="display: none; margin-top: 2rem">
+      <form
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        id="order-form"
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          background: #fff;
+          padding: 1rem;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <input
+          type="hidden"
+          name="access_key"
+          value="f8a6301f-f3e7-408d-a4a3-30cb8bd63074"
+        required
+        />
+        <input type="hidden" name="cart_items" id="cart-items-field" />
+
+        <input name="name" placeholder="Enter your name" required />
+        <input
+          name="mobile"
+          placeholder="Mobile number (10 digits)"
+          pattern="\d{10}"
+          required
+        />
+        <input name="address_line_1" placeholder="Address line 1" />
+        <input name="address_line_2" placeholder="Address line 2" />
+        <textarea
+          name="notes"
+          placeholder="Additional notes (optional)"
+        ></textarea>
+
+        <button
+          type="submit"
+          style="
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+        >
+          Submit Order
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const cartContainer = document.getElementById("cart-container");
+      const orderMessage = document.getElementById("order-message");
+      const checkoutBtn = document.getElementById("checkout-btn");
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const imageMap = {
+        Apple: "../imagers/apple.png",
+        Banana: "../imagers/banana.png",
+        Watermelon: "../imagers/Screenshot 2025-04-20 174835.png",
+        Orange: "../imagers/Screenshot 2025-04-20 174748.png",
+        Strawberry: "../imagers/Screenshot 2025-04-20 175235.png",
+        Guava: "../imagers/Screenshot 2025-04-20 175235.png",
+        Litchi: "../imagers/Screenshot 2025-04-20 182452.png",
+        Grape: "../imagers/Screenshot 2025-04-20 182452.png",
+        Mango: "../imagers/mango.png",
+        Pineapple: "../imagers/pineapple.png",
+      };
+
+      function renderCart() {
+        cartContainer.innerHTML = "";
+        if (cart.length === 0) {
+          cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+          checkoutBtn.style.display = "none";
+          return;
+        }
+
+        cart.forEach((item, index) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "cart-item";
+
+          const imgSrc = imageMap[item.name] || "../imagers/apple.png";
+
+          itemDiv.innerHTML = `
+          <img src="${imgSrc}" alt="${item.name}" class="item-image" />
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-qty">
+              <button class="qty-btn decrease" data-index="${index}">-</button>
+              <input type="number" min="1" value="${
+                item.quantity
+              }" data-index="${index}" class="qty-input" />
+              <button class="qty-btn increase" data-index="${index}">+</button>
+            </div>
+          </div>
+          <div class="item-total">₹${(item.price * item.quantity).toFixed(
+            2
+          )}</div>
+          <button class="remove-btn" data-index="${index}">Remove</button>
+        `;
+
+          cartContainer.appendChild(itemDiv);
+        });
+
+        addListeners();
+      }
+
+      function addListeners() {
+        document.querySelectorAll(".remove-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const index = btn.getAttribute("data-index");
+            cart.splice(index, 1);
+            updateCart();
+          });
+        });
+
+        document.querySelectorAll(".qty-input").forEach((input) => {
+          input.addEventListener("change", () => {
+            const index = input.getAttribute("data-index");
+            const newQty = parseInt(input.value);
+            if (newQty > 0) {
+              cart[index].quantity = newQty;
+              updateCart();
+            }
+          });
+        });
+
+        document.querySelectorAll(".qty-btn.increase").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const index = btn.getAttribute("data-index");
+            cart[index].quantity += 1;
+            updateCart();
+          });
+        });
+
+        document.querySelectorAll(".qty-btn.decrease").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const index = btn.getAttribute("data-index");
+            if (cart[index].quantity > 1) {
+              cart[index].quantity -= 1;
+              updateCart();
+            }
+          });
+        });
+      }
+
+      function updateCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      }
+
+      //   checkoutBtn.addEventListener("click", () => {
+      //     if (cart.length > 0) {
+      //       localStorage.removeItem("cart");
+      //       cart = [];
+      //       renderCart();
+      //       orderMessage.style.display = "block";
+      //     }
+      //   });
+
+      const formWrapper = document.getElementById("form-wrapper");
+      const cartItemsField = document.getElementById("cart-items-field");
+      const orderForm = document.getElementById("order-form");
+
+      checkoutBtn.addEventListener("click", () => {
+        if (cart.length > 0) {
+          // Prepare cart data string
+          const itemsText = cart
+            .map(
+              (item) =>
+                `${item.name} x ${item.quantity} = ₹${(
+                  item.price * item.quantity
+                ).toFixed(2)}`
+            )
+            .join("\n");
+          cartItemsField.value = itemsText;
+
+          // Show the form
+          formWrapper.style.display = "block";
+          checkoutBtn.style.display = "none"; // optional
+        }
+      });
+
+      orderForm.addEventListener("submit", () => {
+        localStorage.removeItem("cart");
+        cart = [];
+        renderCart();
+        orderMessage.style.display = "block";
+      });
+
+      renderCart();
+    </script>
+  </body>
+</html>
